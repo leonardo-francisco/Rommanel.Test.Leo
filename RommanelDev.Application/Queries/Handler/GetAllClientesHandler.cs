@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using MediatR;
 using RommanelDev._Domain.Contracts;
 using RommanelDev.Application.DTO;
 using System;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace RommanelDev.Application.Queries.Handler
 {
-    public class GetAllClientesHandler
+    public class GetAllClientesHandler : IRequestHandler<GetAllClientesQuery, IEnumerable<ClienteDto>>
     {
         private readonly IClienteRepository _clienteRepository;
         private readonly IMapper _mapper;

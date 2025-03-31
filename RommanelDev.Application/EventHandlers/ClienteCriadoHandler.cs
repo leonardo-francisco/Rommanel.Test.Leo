@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using MediatR;
 using RommanelDev._Domain.Contracts;
 using RommanelDev._Domain.Entities;
 using RommanelDev._Domain.Events;

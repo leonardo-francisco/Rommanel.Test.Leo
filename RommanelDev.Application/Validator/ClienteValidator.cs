@@ -16,11 +16,19 @@ namespace RommanelDev.Application.Validator
             RuleFor(c => c.Nome)
             .NotEmpty().WithMessage("O nome é obrigatório.");
 
+            //RuleFor(c => c.Email)
+            //    .NotEmpty().WithMessage("O e-mail é obrigatório.")
+            //    .EmailAddress().WithMessage("Formato de e-mail inválido.")
+            //    .MustAsync(async (email, cancellation) => (await clienteRepository.GetByEmailAsync(email) == null))
+            //    .WithMessage("Já existe um cadastro com este e-mail.");
+
             RuleFor(c => c.Email)
-                .NotEmpty().WithMessage("O e-mail é obrigatório.")
-                .EmailAddress().WithMessage("Formato de e-mail inválido.")
-                .MustAsync(async (email, cancellation) => (await clienteRepository.GetByEmailAsync(email) == null))
-                .WithMessage("Já existe um cadastro com este e-mail.");
+                  .NotEmpty().WithMessage("O e-mail é obrigatório.")
+                  .EmailAddress().WithMessage("Formato de e-mail inválido")
+                  .MustAsync(async (email, cancellation) =>
+                      (await clienteRepository.GetByEmailAsync(email)) == null)
+                  .WithMessage("Já existe um cadastro com este e-mail.")
+                  .When(c => !string.IsNullOrEmpty(c.Email));
 
             RuleFor(c => c.Cpf)
                 .MustAsync(async (cpf, cancellation) =>
@@ -45,7 +53,8 @@ namespace RommanelDev.Application.Validator
                 .When(c => !string.IsNullOrEmpty(c.Cpf));
 
             RuleFor(c => c.IsentoIE)
-                .Must((c, isentoIE) => isentoIE || !string.IsNullOrEmpty(c.Cnpj))
+                .Must((c, isentoIE) =>
+                    !string.IsNullOrEmpty(c.Cnpj) ? isentoIE : true)  
                 .WithMessage("Pessoa Jurídica deve informar a IE ou ser isenta.")
                 .When(c => !string.IsNullOrEmpty(c.Cnpj));
         }

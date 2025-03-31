@@ -1,4 +1,5 @@
-﻿using RommanelDev.Application.DTO;
+﻿using MediatR;
+using RommanelDev.Application.DTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;

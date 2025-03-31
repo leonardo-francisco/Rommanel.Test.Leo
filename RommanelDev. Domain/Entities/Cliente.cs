@@ -18,6 +18,8 @@ namespace RommanelDev._Domain.Entities
         public Endereco Endereco { get; set; }
         public bool IsentoIE { get; set; }
 
+        public Cliente() { }
+
         public Cliente(string nome, CPF? cpf, CNPJ? cnpj, DateTime dataNascimento, string telefone, Email email, Endereco endereco, bool isentoIE)
         {
             Nome = nome;
@@ -42,6 +44,15 @@ namespace RommanelDev._Domain.Entities
 
             if (Cnpj is not null && !IsentoIE)
                 throw new ArgumentException("Pessoa Jurídica deve informar a IE ou ser isenta.");
+        }
+
+        public void Atualizar(string nome, DateTime dataNascimento, string telefone, Endereco endereco, bool isentoIE)
+        {
+            Nome = nome;
+            DataNascimento = dataNascimento;
+            Telefone = telefone;
+            Endereco = endereco;
+            IsentoIE = isentoIE;
         }
     }
 }

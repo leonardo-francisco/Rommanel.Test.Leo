@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using MediatR;
 using RommanelDev._Domain.Contracts;
 using RommanelDev._Domain.Events;
 using RommanelDev.Infrastructure.EventStore;
@@ -30,14 +31,11 @@ namespace RommanelDev.Application.Commands.Handler
             var cliente = await _clienteRepository.GetByIdAsync(request.Id);
             if (cliente is null)
                 return false;
-
-            // Cria um evento de remoção
+           
             var clienteRemovidoEvent = new ClienteRemovidoEvent(cliente.Id.ToString());
 
-            // Salva o evento de remoção
             await _eventStore.SaveAsync(clienteRemovidoEvent);
 
-            // Publica o evento de remoção
             await _mediator.Publish(clienteRemovidoEvent, cancellationToken);
 
             return true;

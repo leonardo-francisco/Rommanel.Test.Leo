@@ -1,4 +1,5 @@
-﻿using RommanelDev._Domain.Contracts;
+﻿using MediatR;
+using RommanelDev._Domain.Contracts;
 using RommanelDev._Domain.Events;
 using System;
 using System.Collections.Generic;

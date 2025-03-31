@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using MongoDB.Bson;
 using RommanelDev._Domain.Entities;
+using RommanelDev._Domain.Events;
 using RommanelDev._Domain.ValueObjects;
 using RommanelDev.Application.DTO;
 using System;
@@ -32,6 +33,29 @@ namespace RommanelDev.Application.Map
 
             CreateMap<EnderecoDto, Endereco>();
             CreateMap<Endereco, EnderecoDto>();
+
+            CreateMap<Cliente, ClienteCriadoEvent>()
+            .ForMember(dest => dest.ClienteId, opt => opt.MapFrom(src => src.Id.ToString()))
+            .ForMember(dest => dest.Nome, opt => opt.MapFrom(src => src.Nome))
+            .ForMember(dest => dest.Cpf, opt => opt.MapFrom(src => src.Cpf != null ? src.Cpf.ToString() : null))
+            .ForMember(dest => dest.Cnpj, opt => opt.MapFrom(src => src.Cnpj != null ? src.Cnpj.ToString() : null))
+            .ForMember(dest => dest.DataNascimento, opt => opt.MapFrom(src => src.DataNascimento))
+            .ForMember(dest => dest.Telefone, opt => opt.MapFrom(src => src.Telefone))
+            .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email.ToString()))
+            .ForMember(dest => dest.Endereco, opt => opt.MapFrom(src => new Endereco(
+                src.Endereco.CEP, src.Endereco.Logradouro, src.Endereco.Numero, src.Endereco.Bairro,
+                src.Endereco.Cidade, src.Endereco.Estado)))
+            .ForMember(dest => dest.IsentoIE, opt => opt.MapFrom(src => src.IsentoIE)).ReverseMap();
+
+            CreateMap<Cliente, ClienteAtualizadoEvent>()
+            .ForMember(dest => dest.ClienteId, opt => opt.MapFrom(src => src.Id))
+            .ForMember(dest => dest.Nome, opt => opt.MapFrom(src => src.Nome))           
+            .ForMember(dest => dest.DataNascimento, opt => opt.MapFrom(src => src.DataNascimento))
+            .ForMember(dest => dest.Telefone, opt => opt.MapFrom(src => src.Telefone))          
+            .ForMember(dest => dest.Endereco, opt => opt.MapFrom(src => new Endereco(
+                src.Endereco.CEP, src.Endereco.Logradouro, src.Endereco.Numero, src.Endereco.Bairro,
+                src.Endereco.Cidade, src.Endereco.Estado)))
+            .ForMember(dest => dest.IsentoIE, opt => opt.MapFrom(src => src.IsentoIE)).ReverseMap();
         }
     }
 }

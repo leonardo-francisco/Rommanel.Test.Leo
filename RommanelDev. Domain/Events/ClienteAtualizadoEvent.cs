@@ -1,4 +1,6 @@
-﻿using System;
+﻿using MediatR;
+using RommanelDev._Domain.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,16 +12,18 @@ namespace RommanelDev._Domain.Events
     {
         public string ClienteId { get; }
         public string Nome { get; }
+        public DateTime DataNascimento { get; }
         public string Telefone { get; }
-        public string Email { get; }
+        public Endereco Endereco { get; }
         public bool IsentoIE { get; }
 
-        public ClienteAtualizadoEvent(string clienteId, string nome, string telefone, string email, bool isentoIE)
+        public ClienteAtualizadoEvent(string clienteId, string nome, DateTime dataNascimento, string telefone, Endereco endereco, bool isentoIE)
         {
             ClienteId = clienteId;
             Nome = nome;
-            Telefone = telefone;
-            Email = email;
+            DataNascimento = dataNascimento;
+            Telefone = telefone;           
+            Endereco = endereco;
             IsentoIE = isentoIE;
         }
     }

@@ -24,5 +24,6 @@ namespace RommanelDev._Domain.Entities
             Cidade = cidade;
             Estado = estado;
         }
+      
     }
 }

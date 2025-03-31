@@ -1,4 +1,5 @@
-﻿using RommanelDev.Application.DTO;
+﻿using MediatR;
+using RommanelDev.Application.DTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace RommanelDev.Application.Commands
 {
-    public class UpdateClienteCommand
+    public class UpdateClienteCommand : IRequest<bool>
     {
         public string Id { get; set; }
         public string Nome { get; set; }

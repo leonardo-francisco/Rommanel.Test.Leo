@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RommanelDev._Domain.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,5 +15,19 @@ namespace RommanelDev.Application.DTO
         public string Bairro { get; set; }
         public string Cidade { get; set; }
         public string Estado { get; set; }
+
+        public static Endereco FromDto(EnderecoDto enderecoDto)
+        {
+            return new Endereco(                                                
+                enderecoDto.CEP,
+                enderecoDto.Logradouro,
+                enderecoDto.Numero,
+                enderecoDto.Bairro,
+                enderecoDto.Cidade,
+                enderecoDto.Estado
+            );
+        }
     }
+
+   
 }

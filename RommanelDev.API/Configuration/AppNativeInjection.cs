@@ -1,4 +1,6 @@
-﻿using RommanelDev._Domain.Contracts;
+﻿using FluentValidation;
+using MediatR;
+using RommanelDev._Domain.Contracts;
 using RommanelDev.Application.Commands;
 using RommanelDev.Application.Commands.Handler;
 using RommanelDev.Application.DTO;
@@ -32,10 +34,10 @@ namespace RommanelDev.API.Configuration
             #endregion
 
             #region CQRS
-            services.AddMediatR(typeof(Program).Assembly);
-            services.AddScoped<IRequestHandler<GetAllClientesQuery, List<ClienteDto>>, GetAllClientesHandler>();
+            services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(AppDomain.CurrentDomain.GetAssemblies()));
+            services.AddScoped<IRequestHandler<GetAllClientesQuery, IEnumerable<ClienteDto>>, GetAllClientesHandler>();
             services.AddScoped<IRequestHandler<GetClienteByIdQuery, ClienteDto>, GetClienteByIdHandler>();
-            services.AddScoped<IRequestHandler<CreateClienteCommand, bool>, CreateClienteHandler>();
+            services.AddScoped<IRequestHandler<CreateClienteCommand, string>, CreateClienteHandler>();
             services.AddScoped<IRequestHandler<UpdateClienteCommand, bool>, UpdateClienteHandler>();
             services.AddScoped<IRequestHandler<RemoveClienteCommand, bool>, RemoveClienteHandler>();
             #endregion

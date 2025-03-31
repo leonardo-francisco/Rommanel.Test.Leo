@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using FluentValidation;
+using MediatR;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using RommanelDev.Application.Commands;
 using RommanelDev.Application.DTO;
@@ -42,15 +44,13 @@ namespace RommanelDev.API.Controllers
 
         [HttpPost]
         public async Task<IActionResult> CriarCliente([FromBody] ClienteDto clienteDto)
-        {
-            // Validar o clienteDto com o FluentValidation
+        {          
             var validationResult = await _validator.ValidateAsync(clienteDto);
             if (!validationResult.IsValid)
             {
                 return BadRequest(validationResult.Errors);
             }
-
-            // Enviar comando para criar o cliente
+           
             var command = new CreateClienteCommand(
                 clienteDto.Nome,
                 clienteDto.Cpf,
@@ -58,6 +58,7 @@ namespace RommanelDev.API.Controllers
                 clienteDto.DataNascimento,
                 clienteDto.Telefone,
                 clienteDto.Email,
+                clienteDto.Endereco,
                 clienteDto.IsentoIE
             );
 
@@ -85,6 +86,7 @@ namespace RommanelDev.API.Controllers
                 clienteDto.DataNascimento,
                 clienteDto.Telefone,
                 clienteDto.Email,
+                clienteDto.Endereco,
                 clienteDto.IsentoIE
             );
 

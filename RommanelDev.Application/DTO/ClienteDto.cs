@@ -16,7 +16,7 @@ namespace RommanelDev.Application.DTO
         public string? Cnpj { get; set; }
         public DateTime DataNascimento { get; set; }
         public string Telefone { get; set; }
-        public string Email { get; set; }
+        public string? Email { get; set; }
         public EnderecoDto Endereco { get;  set; }
         public bool IsentoIE { get; set; }
     }

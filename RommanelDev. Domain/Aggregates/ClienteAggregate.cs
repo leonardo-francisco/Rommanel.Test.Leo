@@ -1,4 +1,6 @@
-﻿using RommanelDev._Domain.Events;
+﻿using MediatR;
+using RommanelDev._Domain.Entities;
+using RommanelDev._Domain.Events;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +12,7 @@ namespace RommanelDev._Domain.Aggregates
     public class ClienteAggregate
     {
         private readonly List<INotification> _events = new();
+        public IReadOnlyCollection<INotification> GetUncommittedEvents() => _events.AsReadOnly();
 
         public string Id { get; private set; }
         public string Nome { get; private set; }
@@ -18,9 +21,10 @@ namespace RommanelDev._Domain.Aggregates
         public DateTime DataNascimento { get; private set; }
         public string Telefone { get; private set; }
         public string Email { get; private set; }
+        public Endereco Endereco { get; private set; }
         public bool IsentoIE { get; private set; }
 
-        public ClienteAggregate(string id, string nome, string? cpf, string? cnpj, DateTime dataNascimento, string telefone, string email, bool isentoIE)
+        public ClienteAggregate(string id, string nome, string? cpf, string? cnpj, DateTime dataNascimento, string telefone, string email, Endereco endereco, bool isentoIE)
         {
             Id = id;
             Nome = nome;
@@ -29,19 +33,40 @@ namespace RommanelDev._Domain.Aggregates
             DataNascimento = dataNascimento;
             Telefone = telefone;
             Email = email;
+            Endereco = endereco;
             IsentoIE = isentoIE;
 
-            _events.Add(new ClienteCriadoEvent(id, nome, cpf, cnpj, dataNascimento, telefone, email, isentoIE));
+            _events.Add(new ClienteCriadoEvent(id, nome, cpf, cnpj, dataNascimento, telefone, email, endereco, isentoIE));
         }
 
-        public void Atualizar(string nome, string telefone, string email, bool isentoIE)
+        private ClienteAggregate() { }
+
+        public static ClienteAggregate FromCliente(Cliente cliente)
         {
+            return new ClienteAggregate
+            {
+                Id = cliente.Id.ToString(),
+                Nome = cliente.Nome,
+                Cpf = cliente.Cpf?.Value,
+                Cnpj = cliente.Cnpj?.Value,
+                DataNascimento = cliente.DataNascimento,
+                Telefone = cliente.Telefone,
+                Email = cliente.Email.Value,
+                Endereco = cliente.Endereco,
+                IsentoIE = cliente.IsentoIE
+            };
+        }
+
+        public void Atualizar(string id, string nome, DateTime dataNascimento, string telefone, Endereco endereco, bool isentoIE)
+        {
+            Id = id;
             Nome = nome;
-            Telefone = telefone;
-            Email = email;
+            DataNascimento = dataNascimento;
+            Telefone = telefone;           
+            Endereco = endereco;
             IsentoIE = isentoIE;
 
-            _events.Add(new ClienteAtualizadoEvent(Id, nome, telefone, email, isentoIE));
+            _events.Add(new ClienteAtualizadoEvent(id, nome, dataNascimento, telefone, endereco,  isentoIE));
         }
 
         public void Remover()
@@ -49,6 +74,10 @@ namespace RommanelDev._Domain.Aggregates
             _events.Add(new ClienteRemovidoEvent(Id));
         }
 
-        public IReadOnlyCollection<INotification> GetUncommittedEvents() => _events;
+        public void ClearUncommittedEvents()
+        {
+            _events.Clear();
+        }
+
     }
 }

@@ -1,7 +1,10 @@
 ﻿using AutoMapper;
+using MediatR;
+using RommanelDev._Domain.Aggregates;
 using RommanelDev._Domain.Contracts;
 using RommanelDev._Domain.Entities;
 using RommanelDev._Domain.ValueObjects;
+using RommanelDev.Application.DTO;
 using RommanelDev.Infrastructure.EventStore;
 using RommanelDev.Infrastructure.Repository;
 using System;
@@ -35,15 +38,25 @@ namespace RommanelDev.Application.Commands.Handler
                 return false;
             }
 
-            // Atualiza os dados do cliente (Você pode ter um método como AtualizarDados no Aggregate)
-            cliente.AtualizarDados(request.Nome, request.Telefone, request.Email, request.IsentoIE);
+            var endereco = EnderecoDto.FromDto(request.Endereco);
+            var clienteAggregate = ClienteAggregate.FromCliente(cliente);
 
-            // Salva os eventos de atualização
-            foreach (var @event in cliente.GetUncommittedEvents())
+            clienteAggregate.Atualizar(cliente.Id.ToString(),
+                                     request.Nome,
+                                     request.DataNascimento,
+                                     request.Telefone,
+                                     endereco,
+                                     request.IsentoIE
+                                 );
+
+            foreach (var @event in clienteAggregate.GetUncommittedEvents())
             {
                 await _eventStore.SaveAsync(@event); // Armazena os eventos
                 await _mediator.Publish(@event, cancellationToken); // Publica os eventos
             }
+
+
+            clienteAggregate.ClearUncommittedEvents();
 
             return true;
         }

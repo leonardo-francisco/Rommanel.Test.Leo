@@ -66,12 +66,9 @@ namespace RommanelDev.Infrastructure.Repository
         {
             var filter = Builders<Cliente>.Filter.Eq(c => c.Id, cliente.Id);
             var update = Builders<Cliente>.Update
-                .Set(c => c.Nome, cliente.Nome)
-                .Set(c => c.Cpf, cliente.Cpf)
-                .Set(c => c.Cnpj, cliente.Cnpj)
+                .Set(c => c.Nome, cliente.Nome)              
                 .Set(c => c.DataNascimento, cliente.DataNascimento)
-                .Set(c => c.Telefone, cliente.Telefone)
-                .Set(c => c.Email, cliente.Email)
+                .Set(c => c.Telefone, cliente.Telefone)                
                 .Set(c => c.Endereco, cliente.Endereco)
                 .Set(c => c.IsentoIE, cliente.IsentoIE);
 
