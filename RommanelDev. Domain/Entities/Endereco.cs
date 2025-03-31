@@ -8,12 +8,12 @@ namespace RommanelDev._Domain.Entities
 {
     public class Endereco
     {
-        public string CEP { get; private set; }
-        public string Logradouro { get; private set; }
-        public string Numero { get; private set; }
-        public string Bairro { get; private set; }
-        public string Cidade { get; private set; }
-        public string Estado { get; private set; }
+        public string CEP { get; set; }
+        public string Logradouro { get; set; }
+        public string Numero { get; set; }
+        public string Bairro { get; set; }
+        public string Cidade { get; set; }
+        public string Estado { get; set; }
 
         public Endereco(string cep, string logradouro, string numero, string bairro, string cidade, string estado)
         {

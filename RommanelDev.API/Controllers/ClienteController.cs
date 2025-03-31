@@ -80,12 +80,9 @@ namespace RommanelDev.API.Controllers
             // Enviar comando para atualizar o cliente
             var command = new UpdateClienteCommand(
                 id,
-                clienteDto.Nome,
-                clienteDto.Cpf,
-                clienteDto.Cnpj,
+                clienteDto.Nome,              
                 clienteDto.DataNascimento,
-                clienteDto.Telefone,
-                clienteDto.Email,
+                clienteDto.Telefone,               
                 clienteDto.Endereco,
                 clienteDto.IsentoIE
             );

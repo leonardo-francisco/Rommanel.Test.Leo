@@ -52,6 +52,7 @@ namespace RommanelDev.API.Configuration
 
             #region Validator
             services.AddScoped<IValidator<ClienteDto>, ClienteValidator>();
+            services.AddScoped<IValidator<EnderecoDto>, EnderecoValidator>();
             #endregion
         }
     }

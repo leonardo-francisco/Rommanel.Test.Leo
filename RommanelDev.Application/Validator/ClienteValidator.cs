@@ -15,13 +15,7 @@ namespace RommanelDev.Application.Validator
         {
             RuleFor(c => c.Nome)
             .NotEmpty().WithMessage("O nome é obrigatório.");
-
-            //RuleFor(c => c.Email)
-            //    .NotEmpty().WithMessage("O e-mail é obrigatório.")
-            //    .EmailAddress().WithMessage("Formato de e-mail inválido.")
-            //    .MustAsync(async (email, cancellation) => (await clienteRepository.GetByEmailAsync(email) == null))
-            //    .WithMessage("Já existe um cadastro com este e-mail.");
-
+           
             RuleFor(c => c.Email)
                   .NotEmpty().WithMessage("O e-mail é obrigatório.")
                   .EmailAddress().WithMessage("Formato de e-mail inválido")
@@ -57,6 +51,13 @@ namespace RommanelDev.Application.Validator
                     !string.IsNullOrEmpty(c.Cnpj) ? isentoIE : true)  
                 .WithMessage("Pessoa Jurídica deve informar a IE ou ser isenta.")
                 .When(c => !string.IsNullOrEmpty(c.Cnpj));
+
+            RuleFor(c => c.Endereco)
+                .NotNull().WithMessage("O endereço é obrigatório.")
+                .DependentRules(() =>
+                {
+                    RuleFor(c => c.Endereco).SetValidator(new EnderecoValidator());
+                });
         }
 
         private int CalcularIdade(DateTime dataNascimento)
