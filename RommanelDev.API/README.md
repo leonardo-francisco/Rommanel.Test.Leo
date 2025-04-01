@@ -29,9 +29,15 @@ Rommanel.Test.Leo
 ## Configuração
 
 ### 1. Clonar o Repositório
-
+## Backend
 ```bash
 git clone https://github.com/leonardo-francisco/Rommanel.Test.Leo.git
+cd Rommanel.Test.Leo
+```
+
+## Frontend
+```bash
+git clone https://github.com/leonardo-francisco/rommanel-teste-app.git
 cd Rommanel.Test.Leo
 ```
 
