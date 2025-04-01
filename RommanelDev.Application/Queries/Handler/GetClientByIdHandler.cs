@@ -10,21 +10,21 @@ using System.Threading.Tasks;
 
 namespace RommanelDev.Application.Queries.Handler
 {
-    public class GetClienteByIdHandler : IRequestHandler<GetClienteByIdQuery, ClienteDto>
+    public class GetClientByIdHandler : IRequestHandler<GetClientByIdQuery, ClientDto>
     {
-        private readonly IClienteRepository _clienteRepository;
+        private readonly IClientRepository _clienteRepository;
         private readonly IMapper _mapper;
 
-        public GetClienteByIdHandler(IClienteRepository clienteRepository, IMapper mapper)
+        public GetClientByIdHandler(IClientRepository clienteRepository, IMapper mapper)
         {
             _clienteRepository = clienteRepository;
             _mapper = mapper;
         }
 
-        public async Task<ClienteDto?> Handle(GetClienteByIdQuery request, CancellationToken cancellationToken)
+        public async Task<ClientDto?> Handle(GetClientByIdQuery request, CancellationToken cancellationToken)
         {
             var cliente = await _clienteRepository.GetByIdAsync(request.Id);
-            return cliente is not null ? _mapper.Map<ClienteDto>(cliente) : null;
+            return cliente is not null ? _mapper.Map<ClientDto>(cliente) : null;
         }
     }
 }

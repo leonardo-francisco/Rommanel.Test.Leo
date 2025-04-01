@@ -19,6 +19,6 @@ namespace RommanelDev.Infrastructure.Context
             _database = client.GetDatabase(databaseName);
         }
 
-        public IMongoCollection<Cliente> Clientes => _database.GetCollection<Cliente>("Clientes");
+        public IMongoCollection<Client> Clients => _database.GetCollection<Client>("Clients");
     }
 }

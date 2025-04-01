@@ -16,46 +16,45 @@ namespace RommanelDev.Application.Map
     {
         public MapConfig()
         {
-            CreateMap<ClienteDto, Cliente>()
+            CreateMap<ClientDto, Client>()
             .ForMember(dest => dest.Id, opt => opt.MapFrom(src => string.IsNullOrWhiteSpace(src.Id) ? ObjectId.GenerateNewId() : ObjectId.Parse(src.Id)))
             .ForMember(dest => dest.Cpf, opt => opt.MapFrom(src => string.IsNullOrWhiteSpace(src.Cpf) ? null : new CPF(src.Cpf)))
             .ForMember(dest => dest.Cnpj, opt => opt.MapFrom(src => string.IsNullOrWhiteSpace(src.Cnpj) ? null : new CNPJ(src.Cnpj)))
             .ForMember(dest => dest.Email, opt => opt.MapFrom(src => new Email(src.Email)))
-            .ForMember(dest => dest.Endereco, opt => opt.MapFrom(src => new Endereco(
-                src.Endereco.CEP, src.Endereco.Logradouro, src.Endereco.Numero, src.Endereco.Bairro,
-                src.Endereco.Cidade, src.Endereco.Estado)));
+            .ForMember(dest => dest.Address, opt => opt.MapFrom(src => new Address(
+                src.Address.ZipCode, src.Address.Street, src.Address.Number, src.Address.Neighborhood,
+                src.Address.City, src.Address.State)));
 
-            CreateMap<Cliente, ClienteDto>()
+            CreateMap<Client, ClientDto>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id.ToString()))
                 .ForMember(dest => dest.Cpf, opt => opt.MapFrom(src => src.Cpf != null ? src.Cpf.Value : null))
                 .ForMember(dest => dest.Cnpj, opt => opt.MapFrom(src => src.Cnpj != null ? src.Cnpj.Value : null))
                 .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email.Value));
 
-            CreateMap<EnderecoDto, Endereco>();
-            CreateMap<Endereco, EnderecoDto>();
+            CreateMap<AddressDto, Address>();
+            CreateMap<Address, AddressDto>();
 
-            CreateMap<Cliente, ClienteCriadoEvent>()
-            .ForMember(dest => dest.ClienteId, opt => opt.MapFrom(src => src.Id.ToString()))
-            .ForMember(dest => dest.Nome, opt => opt.MapFrom(src => src.Nome))
+            CreateMap<Client, ClientCreatedEvent>()           
+            .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
             .ForMember(dest => dest.Cpf, opt => opt.MapFrom(src => src.Cpf != null ? src.Cpf.ToString() : null))
-            .ForMember(dest => dest.Cnpj, opt => opt.MapFrom(src => src.Cnpj != null ? src.Cnpj.ToString() : null))
-            .ForMember(dest => dest.DataNascimento, opt => opt.MapFrom(src => src.DataNascimento))
-            .ForMember(dest => dest.Telefone, opt => opt.MapFrom(src => src.Telefone))
+            .ForMember(dest => dest.Cnpj, opt => opt.MapFrom(src => src.Cnpj != null ? src.Cnpj.ToString() : null))           
+            .ForMember(dest => dest.BirthDate, opt => opt.MapFrom(src => src.BirthDate))
+            .ForMember(dest => dest.Phone, opt => opt.MapFrom(src => src.Phone))
             .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email.ToString()))
-            .ForMember(dest => dest.Endereco, opt => opt.MapFrom(src => new Endereco(
-                src.Endereco.CEP, src.Endereco.Logradouro, src.Endereco.Numero, src.Endereco.Bairro,
-                src.Endereco.Cidade, src.Endereco.Estado)))
-            .ForMember(dest => dest.IsentoIE, opt => opt.MapFrom(src => src.IsentoIE)).ReverseMap();
+            .ForMember(dest => dest.Address, opt => opt.MapFrom(src => new Address(
+                src.Address.ZipCode, src.Address.Street, src.Address.Number, src.Address.Neighborhood,
+                src.Address.City, src.Address.State)))
+            .ForMember(dest => dest.FreeIE, opt => opt.MapFrom(src => src.FreeIE)).ReverseMap();
 
-            CreateMap<Cliente, ClienteAtualizadoEvent>()
-            .ForMember(dest => dest.ClienteId, opt => opt.MapFrom(src => src.Id))
-            .ForMember(dest => dest.Nome, opt => opt.MapFrom(src => src.Nome))           
-            .ForMember(dest => dest.DataNascimento, opt => opt.MapFrom(src => src.DataNascimento))
-            .ForMember(dest => dest.Telefone, opt => opt.MapFrom(src => src.Telefone))          
-            .ForMember(dest => dest.Endereco, opt => opt.MapFrom(src => new Endereco(
-                src.Endereco.CEP, src.Endereco.Logradouro, src.Endereco.Numero, src.Endereco.Bairro,
-                src.Endereco.Cidade, src.Endereco.Estado)))
-            .ForMember(dest => dest.IsentoIE, opt => opt.MapFrom(src => src.IsentoIE)).ReverseMap();
+            CreateMap<Client, ClientUpdatedEvent>()
+            .ForMember(dest => dest.ClientId, opt => opt.MapFrom(src => src.Id))
+            .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))           
+            .ForMember(dest => dest.BirthDate, opt => opt.MapFrom(src => src.BirthDate))
+            .ForMember(dest => dest.Phone, opt => opt.MapFrom(src => src.Phone))          
+            .ForMember(dest => dest.Address, opt => opt.MapFrom(src => new Address(
+                src.Address.ZipCode, src.Address.Street, src.Address.Number, src.Address.Neighborhood,
+                src.Address.City, src.Address.State)))
+            .ForMember(dest => dest.FreeIE, opt => opt.MapFrom(src => src.FreeIE)).ReverseMap();
         }
     }
 }

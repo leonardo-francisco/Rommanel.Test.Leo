@@ -11,14 +11,14 @@ using System.Threading.Tasks;
 
 namespace RommanelDev.Application.Commands.Handler
 {
-    public class RemoveClienteHandler : IRequestHandler<RemoveClienteCommand, bool>
+    public class RemoveClienteHandler : IRequestHandler<RemoveClientCommand, bool>
     {
         private readonly IEventStore _eventStore;
         private readonly IMapper _mapper;
         private readonly IMediator _mediator;
-        private readonly IClienteRepository _clienteRepository;
+        private readonly IClientRepository _clienteRepository;
 
-        public RemoveClienteHandler(IEventStore eventStore, IMapper mapper, IMediator mediator, IClienteRepository clienteRepository)
+        public RemoveClienteHandler(IEventStore eventStore, IMapper mapper, IMediator mediator, IClientRepository clienteRepository)
         {
             _eventStore = eventStore;
             _mapper = mapper;
@@ -26,13 +26,13 @@ namespace RommanelDev.Application.Commands.Handler
             _clienteRepository = clienteRepository;
         }
 
-        public async Task<bool> Handle(RemoveClienteCommand request, CancellationToken cancellationToken)
+        public async Task<bool> Handle(RemoveClientCommand request, CancellationToken cancellationToken)
         {
             var cliente = await _clienteRepository.GetByIdAsync(request.Id);
             if (cliente is null)
                 return false;
            
-            var clienteRemovidoEvent = new ClienteRemovidoEvent(cliente.Id.ToString());
+            var clienteRemovidoEvent = new ClientRemovedEvent(cliente.Id.ToString());
 
             await _eventStore.SaveAsync(clienteRemovidoEvent);
 

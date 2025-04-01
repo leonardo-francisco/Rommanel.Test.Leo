@@ -15,14 +15,14 @@ using System.Threading.Tasks;
 
 namespace RommanelDev.Application.Commands.Handler
 {
-    public class UpdateClienteHandler : IRequestHandler<UpdateClienteCommand, bool>
+    public class UpdateClienteHandler : IRequestHandler<UpdateClientCommand, bool>
     {
         private readonly IEventStore _eventStore;
         private readonly IMapper _mapper;
         private readonly IMediator _mediator;
-        private readonly IClienteRepository _clienteRepository;
+        private readonly IClientRepository _clienteRepository;
 
-        public UpdateClienteHandler(IEventStore eventStore, IMapper mapper, IMediator mediator, IClienteRepository clienteRepository)
+        public UpdateClienteHandler(IEventStore eventStore, IMapper mapper, IMediator mediator, IClientRepository clienteRepository)
         {
             _eventStore = eventStore;
             _mapper = mapper;
@@ -30,7 +30,7 @@ namespace RommanelDev.Application.Commands.Handler
             _clienteRepository = clienteRepository;
         }
 
-        public async Task<bool> Handle(UpdateClienteCommand request, CancellationToken cancellationToken)
+        public async Task<bool> Handle(UpdateClientCommand request, CancellationToken cancellationToken)
         {
             var cliente = await _clienteRepository.GetByIdAsync(request.Id);
             if (cliente == null)
@@ -38,21 +38,21 @@ namespace RommanelDev.Application.Commands.Handler
                 return false;
             }
 
-            var endereco = EnderecoDto.FromDto(request.Endereco);
-            var clienteAggregate = ClienteAggregate.FromCliente(cliente);
+            var endereco = AddressDto.FromDto(request.Address);
+            var clienteAggregate = ClientAggregate.FromClient(cliente);
 
-            clienteAggregate.Atualizar(cliente.Id.ToString(),
-                                     request.Nome,
-                                     request.DataNascimento,
-                                     request.Telefone,
+            clienteAggregate.Update(cliente.Id.ToString(),
+                                     request.Name,
+                                     request.BirthDate,
+                                     request.Phone,
                                      endereco,
-                                     request.IsentoIE
+                                     request.FreeIE
                                  );
 
             foreach (var @event in clienteAggregate.GetUncommittedEvents())
             {
-                await _eventStore.SaveAsync(@event); // Armazena os eventos
-                await _mediator.Publish(@event, cancellationToken); // Publica os eventos
+                await _eventStore.SaveAsync(@event); 
+                await _mediator.Publish(@event, cancellationToken); 
             }
 
 

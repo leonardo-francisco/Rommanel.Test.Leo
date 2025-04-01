@@ -13,39 +13,40 @@ using System.Transactions;
 
 namespace RommanelDev.Infrastructure.Repository
 {
-    public class ClienteRepository : IClienteRepository
+    public class ClientRepository : IClientRepository
     {
-        private readonly IMongoCollection<Cliente> _collection;
+        private readonly IMongoCollection<Client> _collection;
 
-        public ClienteRepository(MongoDbContext context)
+        public ClientRepository(MongoDbContext context)
         {
-            _collection = context.Clientes;
+            _collection = context.Clients;
         }
 
-        public async Task AddAsync(Cliente cliente)
+        public async Task<Client> AddAsync(Client client)
         {
-            await _collection.InsertOneAsync(cliente);
+            await _collection.InsertOneAsync(client);
+            return client;
         }
 
-        public async Task<IEnumerable<Cliente>> GetAllAsync()
+        public async Task<IEnumerable<Client>> GetAllAsync()
         {
             return await _collection.Find(_ => true).ToListAsync();
         }
 
-        public async Task<Cliente?> GetByCpfCnpjAsync(string documento)
+        public async Task<Client?> GetByCpfCnpjAsync(string document)
         {
-            var customer = await _collection.Find(c => c.Cpf.Value == documento || c.Cnpj.Value == documento)
+            var customer = await _collection.Find(c => c.Cpf.Value == document || c.Cnpj.Value == document)
                                     .FirstOrDefaultAsync();
             return customer;
         }
 
-        public async Task<Cliente?> GetByEmailAsync(string email)
+        public async Task<Client?> GetByEmailAsync(string email)
         {
             var customer = await _collection.Find(x => x.Email.Value == email).FirstOrDefaultAsync();
             return customer;
         }
 
-        public async Task<Cliente?> GetByIdAsync(string id)
+        public async Task<Client?> GetByIdAsync(string id)
         {
             if (!ObjectId.TryParse(id, out ObjectId objectId))
                 return null;
@@ -62,15 +63,15 @@ namespace RommanelDev.Infrastructure.Repository
             await _collection.DeleteOneAsync(c => c.Id == objectId);
         }
 
-        public async Task UpdateAsync(Cliente cliente)
+        public async Task UpdateAsync(Client client)
         {
-            var filter = Builders<Cliente>.Filter.Eq(c => c.Id, cliente.Id);
-            var update = Builders<Cliente>.Update
-                .Set(c => c.Nome, cliente.Nome)              
-                .Set(c => c.DataNascimento, cliente.DataNascimento)
-                .Set(c => c.Telefone, cliente.Telefone)                
-                .Set(c => c.Endereco, cliente.Endereco)
-                .Set(c => c.IsentoIE, cliente.IsentoIE);
+            var filter = Builders<Client>.Filter.Eq(c => c.Id, client.Id);
+            var update = Builders<Client>.Update
+                .Set(c => c.Name, client.Name)              
+                .Set(c => c.BirthDate, client.BirthDate)
+                .Set(c => c.Phone, client.Phone)                
+                .Set(c => c.Address, client.Address)
+                .Set(c => c.FreeIE, client.FreeIE);
 
             var result = await _collection.UpdateOneAsync(filter, update);
         }

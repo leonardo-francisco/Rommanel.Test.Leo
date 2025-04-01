@@ -14,11 +14,13 @@ using System.Threading.Tasks;
 
 namespace RommanelDev.Application.Commands.Handler
 {
-    public class CreateClienteHandler : IRequestHandler<CreateClienteCommand, string>
+    public class CreateClienteHandler : IRequestHandler<CreateClientCommand, string>
     {
         private readonly IEventStore _eventStore;
         private readonly IMediator _mediator;
         private readonly IMapper _mapper;
+
+        private static readonly TaskCompletionSource<string> _idSource = new TaskCompletionSource<string>();
 
         public CreateClienteHandler(IEventStore eventStore, IMediator mediator, IMapper mapper)
         {
@@ -28,20 +30,19 @@ namespace RommanelDev.Application.Commands.Handler
 
         }
 
-        public async Task<string> Handle(CreateClienteCommand request, CancellationToken cancellationToken)
+        public async Task<string> Handle(CreateClientCommand request, CancellationToken cancellationToken)
         {
-            var endereco = EnderecoDto.FromDto(request.Endereco);
+            var endereco = AddressDto.FromDto(request.Address);
 
-            var cliente = new ClienteAggregate(
-            Guid.NewGuid().ToString(),
-            request.Nome,
+            var cliente = new ClientAggregate(            
+            request.Name,
             request.Cpf,
             request.Cnpj,
-            request.DataNascimento,
-            request.Telefone,
+            request.BirthDate,
+            request.Phone,
             request.Email,
             endereco,
-            request.IsentoIE
+            request.FreeIE
                    );
 
             foreach (var @event in cliente.GetUncommittedEvents())
@@ -50,7 +51,12 @@ namespace RommanelDev.Application.Commands.Handler
                 await _mediator.Publish(@event);
             }
 
-            return cliente.Id;
+            return await _idSource.Task;
+        }
+
+        public static void SetClienteId(string id)
+        {
+            _idSource.TrySetResult(id);
         }
     }
 }

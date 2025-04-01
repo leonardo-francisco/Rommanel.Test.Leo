@@ -8,16 +8,16 @@ using System.Threading.Tasks;
 
 namespace RommanelDev.Application.DTO
 {
-    public class ClienteDto
+    public class ClientDto
     {
         public string? Id { get; set; }
-        public string Nome { get; set; }
+        public string Name { get; set; }
         public string? Cpf { get; set; }
         public string? Cnpj { get; set; }
-        public DateTime DataNascimento { get; set; }
-        public string Telefone { get; set; }
+        public DateTime BirthDate { get; set; }
+        public string Phone { get; set; }
         public string? Email { get; set; }
-        public EnderecoDto Endereco { get;  set; }
-        public bool IsentoIE { get; set; }
+        public AddressDto Address { get;  set; }
+        public bool FreeIE { get; set; }
     }
 }

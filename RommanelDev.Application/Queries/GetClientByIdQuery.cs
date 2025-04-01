@@ -8,7 +8,13 @@ using System.Threading.Tasks;
 
 namespace RommanelDev.Application.Queries
 {
-    public class GetAllClientesQuery : IRequest<IEnumerable<ClienteDto>>
+    public class GetClientByIdQuery : IRequest<ClientDto>
     {
+        public string Id { get; }
+
+        public GetClientByIdQuery(string id)
+        {
+            Id = id;
+        }
     }
 }

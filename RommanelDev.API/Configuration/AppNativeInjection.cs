@@ -30,16 +30,16 @@ namespace RommanelDev.API.Configuration
             #endregion
 
             #region Repositories
-            services.AddScoped<IClienteRepository, ClienteRepository>();
+            services.AddScoped<IClientRepository, ClientRepository>();
             #endregion
 
             #region CQRS
             services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(AppDomain.CurrentDomain.GetAssemblies()));
-            services.AddScoped<IRequestHandler<GetAllClientesQuery, IEnumerable<ClienteDto>>, GetAllClientesHandler>();
-            services.AddScoped<IRequestHandler<GetClienteByIdQuery, ClienteDto>, GetClienteByIdHandler>();
-            services.AddScoped<IRequestHandler<CreateClienteCommand, string>, CreateClienteHandler>();
-            services.AddScoped<IRequestHandler<UpdateClienteCommand, bool>, UpdateClienteHandler>();
-            services.AddScoped<IRequestHandler<RemoveClienteCommand, bool>, RemoveClienteHandler>();
+            services.AddScoped<IRequestHandler<GetAllClientsQuery, IEnumerable<ClientDto>>, GetAllClientsHandler>();
+            services.AddScoped<IRequestHandler<GetClientByIdQuery, ClientDto>, GetClientByIdHandler>();
+            services.AddScoped<IRequestHandler<CreateClientCommand, string>, CreateClienteHandler>();
+            services.AddScoped<IRequestHandler<UpdateClientCommand, bool>, UpdateClienteHandler>();
+            services.AddScoped<IRequestHandler<RemoveClientCommand, bool>, RemoveClienteHandler>();
             #endregion
 
             #region Events
@@ -51,8 +51,8 @@ namespace RommanelDev.API.Configuration
             #endregion
 
             #region Validator
-            services.AddScoped<IValidator<ClienteDto>, ClienteValidator>();
-            services.AddScoped<IValidator<EnderecoDto>, EnderecoValidator>();
+            services.AddScoped<IValidator<ClientDto>, ClientValidator>();
+            services.AddScoped<IValidator<AddressDto>, AddressValidator>();
             #endregion
         }
     }

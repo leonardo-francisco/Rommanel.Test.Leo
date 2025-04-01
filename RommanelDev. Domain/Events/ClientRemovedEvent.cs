@@ -7,13 +7,13 @@ using System.Threading.Tasks;
 
 namespace RommanelDev._Domain.Events
 {
-    public class ClienteRemovidoEvent : INotification
+    public class ClientRemovedEvent : INotification
     {
-        public string ClienteId { get; }
+        public string ClientId { get; }
 
-        public ClienteRemovidoEvent(string clienteId)
+        public ClientRemovedEvent(string clientId)
         {
-            ClienteId = clienteId;
+            ClientId = clientId;
         }
     }
 }
